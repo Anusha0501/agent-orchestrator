@@ -7,8 +7,8 @@ import { TopbarButton } from "./TopbarButton";
 import { WelcomePanel } from "./WelcomePanel";
 import { OrchestratorIcon } from "./icons";
 
-// Board empty states: first-launch welcome (`BoardWelcome`) and project board
-// with no worker sessions yet (`ProjectBoardEmpty`).
+// Board empty states: first-launch welcome (`BoardWelcome`) and a fresh
+// project that still needs a first task (`ProjectBoardEmpty`).
 export function BoardWelcome() {
 	const { cloneProject, createProject, initializeProjectRepository } = useShell();
 	return (
@@ -32,9 +32,10 @@ export function BoardWelcome() {
 	);
 }
 
-// Project board with a registered project but no worker sessions yet: a quiet
-// invitation instead of four empty columns. Actions mirror the board header
-// (Orchestrator stays the primary, like the topbar) so the vocabulary holds.
+// Project board with a registered project but no tasks yet: confirm setup
+// succeeded, explain the next step, and invite work instead of four empty
+// columns. Actions mirror the board header (Orchestrator stays the primary,
+// like the topbar) so the vocabulary holds.
 export function ProjectBoardEmpty({
 	hasOrchestrator,
 	isProjectRestarting,
@@ -65,20 +66,27 @@ export function ProjectBoardEmpty({
 			<div className="flex w-full max-w-preview-content flex-col items-center pb-empty-offset-y text-center">
 				<h2 className="text-subtitle font-semibold tracking-tight text-foreground">{t("board.empty.title")}</h2>
 				<p className="mt-2 text-md-sm leading-relaxed text-muted-foreground">{t("board.empty.body")}</p>
-				<div className="mt-5 flex items-center gap-2">
-					<TopbarButton
-						aria-label={orchestratorLabel}
-						disabled={isSpawning || isProjectRestarting}
-						onClick={onOpenOrchestrator}
-						variant="primary"
-					>
-						<OrchestratorIcon className="size-icon-md" aria-hidden="true" />
-						{busyLabel}
-					</TopbarButton>
-					<TopbarButton aria-label={t("shell.newTask")} disabled={isProjectRestarting} onClick={onNewTask} variant="accent">
-						<Plus className="size-icon-md" aria-hidden="true" />
-						{t("shell.newTask")}
-					</TopbarButton>
+				<p className="mt-3 text-caption font-medium tracking-wide text-muted-foreground">{t("board.empty.workflow")}</p>
+				<div className="mt-5 flex items-start justify-center gap-3">
+					<div className="flex flex-col items-center gap-1.5">
+						<TopbarButton
+							aria-label={orchestratorLabel}
+							disabled={isSpawning || isProjectRestarting}
+							onClick={onOpenOrchestrator}
+							variant="primary"
+						>
+							<OrchestratorIcon className="size-icon-md" aria-hidden="true" />
+							{busyLabel}
+						</TopbarButton>
+						<p className="max-w-44 text-caption leading-body text-muted-foreground">{t("board.empty.orchestratorHint")}</p>
+					</div>
+					<div className="flex flex-col items-center gap-1.5">
+						<TopbarButton aria-label={t("shell.newTask")} disabled={isProjectRestarting} onClick={onNewTask} variant="accent">
+							<Plus className="size-icon-md" aria-hidden="true" />
+							{t("shell.newTask")}
+						</TopbarButton>
+						<p className="max-w-44 text-caption leading-body text-muted-foreground">{t("board.empty.newTaskHint")}</p>
+					</div>
 				</div>
 				{spawnError && (
 					<div className="mt-3 flex flex-col items-center gap-2">
