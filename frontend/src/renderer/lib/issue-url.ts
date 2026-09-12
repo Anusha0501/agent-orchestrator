@@ -41,6 +41,9 @@ export function trackerIssueLink(
 	const canonical = parseCanonicalIssueId(raw);
 	if (canonical) return toLink(canonical);
 
+	// Future-proofing: board/topbar currently pass only `issueId`, so this
+	// origin-backed path is unused in production. Keep it so a later caller
+	// can supply a single project origin without guessing from PRs.
 	const number = parseBareIssueNumber(raw);
 	if (number === undefined) return undefined;
 	const fromOrigin = parseOrigin(project?.originUrl);

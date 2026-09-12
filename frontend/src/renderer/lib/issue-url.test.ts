@@ -50,7 +50,7 @@ describe("trackerIssueLink", () => {
 		expect(trackerIssueLink(undefined)).toBeUndefined();
 	});
 
-	it("resolves a bare number only against a single project origin", () => {
+	it("resolves a bare number only against a single project origin (unused by board/topbar today)", () => {
 		expect(
 			trackerIssueLink("github:42", { originUrl: "https://github.com/acme/demo.git" }),
 		).toEqual({
